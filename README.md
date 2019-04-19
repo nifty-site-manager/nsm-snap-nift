@@ -1,6 +1,7 @@
 <p align="center">
     <center><img src="https://gitlab.com/nifty-site-manager/nsm/raw/master/nsm.png" width='270'/></center>
 </p>
+
 =====
 
 Copyright (c) 2015-present [Nicholas Ham](https://n-ham.com).
