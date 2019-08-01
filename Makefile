@@ -1,4 +1,4 @@
-#basic makefile for nsm
+#basic makefile for nsm-snap
 objects=nsm.o DateTimeInfo.o Directory.o Filename.o PageBuilder.o PageInfo.o Path.o Quoted.o SiteInfo.o Title.o
 cppfiles=nsm.cpp DateTimeInfo.cpp Directory.cpp Filename.cpp PageBuilder.cpp PageInfo.cpp Path.cpp Quoted.cpp SiteInfo.cpp Title.cpp
 CC=g++
@@ -40,32 +40,11 @@ Quoted.o: Quoted.cpp Quoted.h
 install:
 	chmod 755 nsm
 	sudo mv nsm /usr/local/bin
-
-linux-gedit-highlighting:
 	chmod 644 html.lang
 	sudo cp html.lang /usr/share/gtksourceview-3.0/language-specs/html.lang
 
-linux-install:
-	chmod 755 nsm
-	sudo mv nsm /usr/local/bin
-	chmod 644 html.lang
-	sudo cp html.lang /usr/share/gtksourceview-3.0/language-specs/html.lang
-
-osx-install:
-	chmod 755 nsm
-	sudo mkdir -p ~/.nsm
-	sudo mv nsm ~/.nsm
-	sudo cp /etc/paths ./
-	sudo chmod a+w paths
-	sudo grep -v "~/.nsm" paths > tempp
-	sudo mv tempp paths
-	sudo echo "~/.nsm" >> paths
-	sudo chmod 644 paths
-	sudo mv paths /etc/paths
-
-windows-install:
-	chmod 755 nsm
-	mv nsm ~/bin
+uninstall:
+	sudo rm /usr/local/bin/nsm
 
 clean:
 	rm -f $(objects)
