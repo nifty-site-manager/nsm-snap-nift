@@ -7,7 +7,7 @@ description: |
   and LaTeX-like command-line (static) site
   manager/generator. See https://nift.cc.
 
-confinement: stable
+confinement: strict
 base: core18
 
 parts:
