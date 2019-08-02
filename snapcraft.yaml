@@ -8,7 +8,6 @@ description: |
   manager/generator. See https://nift.cc.
 
 confinement: strict
-devmode: false
 base: core18
 
 parts:
