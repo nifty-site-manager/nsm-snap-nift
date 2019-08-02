@@ -2,7 +2,7 @@ name: nsm
 version: '1.0'
 summary: (static) site manager/generator
 description: |
-  nsm is a cross platform open source git-like
+  nsm is a cross-platform open source git-like
   and LaTeX-like command-line (static) site
   manager/generator. See https://nift.cc.
 icon: nsm.png
@@ -12,7 +12,7 @@ base: core18
 
 parts:
   nsm:
-    plugin: autotools
+    plugin: ''
     source-type: tar
     source: https://gitlab.com/nifty-site-manager/nsm-snap/-/archive/master/nsm-snap-master.tar
     build-packages:
