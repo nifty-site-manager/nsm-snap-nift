@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
     {
         std::cout << "+---------- available commands ----------------------------------------+" << std::endl;
         std::cout << "| nsm commands       | lists all nsm commands                          |" << std::endl;
-        std::cout << "| nsm config         | lists config settings                           |" << std::endl;
+        std::cout << "| nsm config         | list config settings or set git email/username  |" << std::endl;
         std::cout << "| nsm clone          | input: clone-url                                |" << std::endl;
         std::cout << "| nsm init           | initialise managing a site - input: (site-name) |" << std::endl;
         std::cout << "| nsm status         | lists updated and problem pages                 |" << std::endl;
@@ -245,7 +245,12 @@ int main(int argc, char* argv[])
     {
         //ensures correct number of parameters given
         if(noParams != 4)
+        {
+            std::cout << "you might have meant either of:" << std::endl;
+            std::cout << "  nsm config --global user.email \"you@example.com\"" << std::endl;
+            std::cout << "  nsm config --global user.name \"Your Username\"" << std::endl;
             return parError(noParams, argv, "1 or 4");
+        }
 
         std::string str = argv[2];
         if(str == "--global")
