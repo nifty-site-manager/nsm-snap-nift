@@ -14,7 +14,7 @@ parts:
   nsm:
     plugin: make
     source-type: tar
-    source: https://gitlab.com/nifty-site-manager/nsm-snap/-/archive/master/nsm-snap-master.tar
+    source: https://github.com/nifty-site-manager/nsm-snap/blob/master/nsm-v1.0.tar
     build-packages:
     - g++
 
