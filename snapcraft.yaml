@@ -1,6 +1,7 @@
 name: nsm
 version: '1.0'
 summary: (static) site manager/generator
+license: MIT
 description: |
   nsm is a cross-platform open source git-like
   and LaTeX-like command-line (static) site
