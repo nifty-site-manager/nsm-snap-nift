@@ -40,8 +40,6 @@ Quoted.o: Quoted.cpp Quoted.h
 install:
 	chmod 755 nsm
 	sudo mv nsm /usr/local/bin
-	chmod 644 html.lang
-	sudo cp html.lang /usr/share/gtksourceview-3.0/language-specs/html.lang
 
 uninstall:
 	sudo rm /usr/local/bin/nsm
