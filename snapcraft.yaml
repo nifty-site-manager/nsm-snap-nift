@@ -23,6 +23,9 @@ parts:
 apps:
   nsm:
     command: nsm
+    plugs:
+      - home
+      - removable-media
     environment:
       LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio
       DISABLE_WAYLAND: '1'
