@@ -290,6 +290,7 @@ int main(int argc, char* argv[])
         std::ifstream ifs(".1223fsf23.txt");
         ifs >> str;
         ifs.close();
+        system("rm -r .1223fsf23.txt");
         if(str == "")
         {
             std::cout << "*** Please tell me who you are." << std::endl;
@@ -474,6 +475,7 @@ int main(int argc, char* argv[])
             std::ifstream ifs(".1223fsf23.txt");
             ifs >> str;
             ifs.close();
+            system("rm -r .1223fsf23.txt");
             if(str == "")
             {
                 std::cout << "*** Please tell me who you are." << std::endl;

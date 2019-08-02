@@ -27,3 +27,7 @@ apps:
     environment:
       LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio
       DISABLE_WAYLAND: '1'
+      GIT_TEMPLATE_DIR: $SNAP/share/git-core/templates
+      GIT_CONFIG_NOSYSTEM: "true"
+      GIT_EXEC_PATH: $SNAP/libexec/git-core
+      GIT_TEXTDOMAINDIR: $SNAP/usr/share/locale
