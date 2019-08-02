@@ -19,7 +19,7 @@ parts:
     - g++
     stage-packages:
     - libcurl4-openssl-dev 
-    - git
+    - git-all
 
 apps:
   nsm:
