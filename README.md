@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://gitlab.com/nifty-site-manager/nsm-snap/raw/master/signature.png" width='120'/>
+    <img src="https://github.com/nifty-site-manager/nsm-snap/blob/master/signature.png" width='120'/>
 </p>
 
 =====
