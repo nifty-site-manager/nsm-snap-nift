@@ -1,6 +1,6 @@
 /*
     nsm (nifty site manager) is a cross-platform open source
-    git-like and LaTeX-like site manager.
+    git-like and LaTeX-like command-line site manager.
 
     site: https://nift.cc
 
@@ -260,8 +260,6 @@ int main(int argc, char* argv[])
             {
                 std::string cmdStr = "git config --global user.email " + std::string(argv[4]);
                 system(cmdStr.c_str());
-                system("git config --global --unset http.proxy");
-                system("git config --global --unset https.proxy");
             }
             else if(str == "user.name")
             {
