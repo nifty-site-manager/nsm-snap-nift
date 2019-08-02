@@ -17,7 +17,11 @@ parts:
     source: https://github.com/nifty-site-manager/nsm-snap/raw/master/nsm.tar
     build-packages:
     - g++
+    - gettext 
+    - libssl-dev
+    - libexpat1-dev
     stage-packages:
+    - gettext
     - libcurl4-openssl-dev 
     - git
 
@@ -27,7 +31,7 @@ apps:
     environment:
       LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio
       DISABLE_WAYLAND: '1'
-      GIT_TEMPLATE_DIR: $SNAP/share/git-core/templates
+      GIT_TEMPLATE_DIR: $SNAP/usr/share/git-core/templates
       GIT_CONFIG_NOSYSTEM: "true"
       GIT_EXEC_PATH: $SNAP/libexec/git-core
       GIT_TEXTDOMAINDIR: $SNAP/usr/share/locale
