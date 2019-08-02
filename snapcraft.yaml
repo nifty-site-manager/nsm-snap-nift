@@ -18,7 +18,6 @@ parts:
     build-packages:
     - g++
     stage-packages:
-    - libcurl4-openssl-dev 
     - git-core
 
 apps:
