@@ -4,8 +4,9 @@ summary: (static) site manager/generator
 license: MIT
 description: |
   nsm is a cross-platform open source git-like
-  and LaTeX-like command-line (static) site
-  manager/generator. See https://nift.cc.
+  and LaTeX-like command-line dynamic/static site
+  generator and dynamic/static site manager. 
+  See https://nift.cc.
 
 confinement: strict
 base: core18
