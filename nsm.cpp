@@ -393,15 +393,6 @@ int main(int argc, char* argv[])
                 return parError(noParams, argv, "2");
             }
 
-            if(site.build_updated())
-                return 1;
-
-            std::string commitCmnd = "git commit -m \"" + std::string(argv[2]) + "\"",
-                        pushCmnd,
-                        siteDirBranch,
-                        siteRootDirBranch = get_pb();
-            std::cout << commitCmnd << std::endl;
-
             system("git config --get remote.origin.url > .txt65232g42f.txt");
             std::ifstream ifs(".txt65232g42f.txt");
             std::string str="";
@@ -413,6 +404,15 @@ int main(int argc, char* argv[])
                 std::cout << "error: no remote git url set" << std::endl;
                 return 1;
             }
+
+            if(site.build_updated())
+                return 1;
+
+            std::string commitCmnd = "git commit -m \"" + std::string(argv[2]) + "\"",
+                        pushCmnd,
+                        siteDirBranch,
+                        siteRootDirBranch = get_pb();
+            std::cout << commitCmnd << std::endl;
 
             chdir(site.siteDir.c_str());
 
