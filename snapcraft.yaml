@@ -29,5 +29,5 @@ apps:
       DISABLE_WAYLAND: '1'
       GIT_TEMPLATE_DIR: $SNAP/usr/share/git-core/templates
       GIT_CONFIG_NOSYSTEM: "true"
-      GIT_EXEC_PATH: $SNAP/user/share/git-core
+      GIT_EXEC_PATH: $SNAP/libexec/git-core
       GIT_TEXTDOMAINDIR: $SNAP/usr/share/locale
