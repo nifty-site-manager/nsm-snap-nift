@@ -18,6 +18,8 @@ parts:
     source: https://github.com/nifty-site-manager/nsm-snap/raw/master/nsm.tar
     build-packages:
     - g++
+	stage-packages:
+	- git
 
 apps:
   nsm:

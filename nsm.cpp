@@ -175,7 +175,7 @@ int main(int argc, char* argv[])
         system("rm -r .txt23235f2t.txt");
         if(str != ". .. .git .txt23235f2t.txt " && str != ". .. .txt23235f2t.txt ")
         {
-            std::cout << "error: init must be run in an empty git repository" << std::endl;
+            std::cout << "error: init must be run in an empty directory or empty git repository" << std::endl;
             return 1;
         }
 
@@ -224,8 +224,18 @@ int main(int argc, char* argv[])
             ofs << "<title>" << argv[2] << " - @pagetitle</title>" << std::endl;
         ofs.close();
 
-        system("nsm track index");
-        system("nsm build-updated");
+        SiteInfo site;
+        if(site.open() > 0)
+            return 1;
+
+        Name name = "index";
+        Title title;
+        title = get_title(name);
+        site.track(name, title, site.defaultTemplate);
+        site.build_updated();
+
+        //system("nsm track index");
+        //system("nsm build-updated");
 
         std::cout << "nsm: initialised empty site in " << get_pwd() << "/.siteinfo/" << std::endl;
 
