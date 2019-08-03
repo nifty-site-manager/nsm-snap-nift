@@ -1,13 +1,15 @@
 name: nsm
 version: '1.0'
-summary: dynamic/static site generator/manager
+summary: static site generator
 license: MIT
 description: |
-  nsm is a cross-platform open source git-like
-  and LaTeX-like command-line dynamic/static site
-  manager/generator. See https://nift.cc.
+  install: `snap install nsm --edge --devmode`
+  
+  Nifty site manager (nsm) is a cross-platform open
+  source git-like and LaTeX-like command-line dynamic
+  and static site generator. See https://nift.cc.
 
-confinement: devmode
+confinement: strict
 base: core18
 
 parts:
@@ -26,6 +28,8 @@ apps:
     plugs:
       - home
       - removable-media
+      - network
+      - network-bind
     environment:
       LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio
       DISABLE_WAYLAND: '1'
