@@ -8,7 +8,6 @@ description: |
   generator and dynamic/static site manager. 
   See https://nift.cc.
 
-private: false
 confinement: strict
 base: core18
 
