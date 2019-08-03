@@ -259,7 +259,6 @@ int main(int argc, char* argv[])
             if(str == "user.email")
             {
                 std::string cmdStr = "git config --global user.email " + std::string(argv[4]);
-                std::cout << "wtf" << std::endl;
                 system(cmdStr.c_str());
             }
             else if(str == "user.name")

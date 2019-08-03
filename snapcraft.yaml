@@ -18,9 +18,7 @@ parts:
     source: https://github.com/nifty-site-manager/nsm-snap/raw/master/nsm.tar
     build-packages:
     - g++
-    - libssl-dev
     stage-packages:
-    - libcurl4-openssl-dev 
     - git-core
 
 apps:
@@ -29,6 +27,8 @@ apps:
     plugs:
       - home
       - removable-media
+      - proxy
+      - git
     environment:
       LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio
       DISABLE_WAYLAND: '1'
