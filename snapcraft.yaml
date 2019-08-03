@@ -1,12 +1,11 @@
 name: nsm
 version: '1.0'
-summary: (static) site manager/generator
+summary: dynamic/static site generator/manager
 license: MIT
 description: |
   nsm is a cross-platform open source git-like
   and LaTeX-like command-line dynamic/static site
-  generator and dynamic/static site manager. 
-  See https://nift.cc.
+  manager/generator. See https://nift.cc.
 
 confinement: strict
 base: core18
@@ -19,7 +18,7 @@ parts:
     build-packages:
     - g++
     stage-packages:
-    - git-core
+    - git-all
 
 apps:
   nsm:
@@ -27,8 +26,6 @@ apps:
     plugs:
       - home
       - removable-media
-      - proxy
-      - git
     environment:
       LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio
       DISABLE_WAYLAND: '1'
