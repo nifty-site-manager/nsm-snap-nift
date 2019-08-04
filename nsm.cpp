@@ -323,7 +323,12 @@ int main(int argc, char* argv[])
             return 0;
         }
 
-        std::string cloneCmnd = "git clone " + std::string(argv[2]);
+        std::string cloneURL = std::string(argv[2]);
+
+        if(cloneURL.size() && cloneURL[0] == '?')
+            cloneURL = cloneURL.substr(1, cloneURL.size()-1);
+
+        std::string cloneCmnd = "git clone " + cloneURL;
         std::string dirName = "";
         std::string parDir = "../";
 
