@@ -15,8 +15,8 @@ base: core18
 parts:
   nsm:
     plugin: make
-    source-type: tar.xz
-    source: https://github.com/nifty-site-manager/nsm-snap/raw/master/nsm.tar.xz
+    source-type: zip
+    source: https://github.com/nifty-site-manager/nsm-snap/raw/master/nsm.zip
     build-packages:
     - g++
     stage-packages:
