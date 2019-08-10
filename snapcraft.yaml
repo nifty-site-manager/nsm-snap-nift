@@ -1,6 +1,6 @@
 name: nsm
 version: '1.0'
-summary: static site generator
+summary: dynamic/static site generator
 license: MIT
 description: |
   install: `snap install nsm`
@@ -15,8 +15,8 @@ base: core18
 parts:
   nsm:
     plugin: make
-    source-type: tar
-    source: https://github.com/nifty-site-manager/nsm-snap/raw/master/nsm.tar
+    source-type: tar.xz
+    source: https://github.com/nifty-site-manager/nsm-snap/raw/master/nsm.tar.xz
     build-packages:
     - g++
     stage-packages:
