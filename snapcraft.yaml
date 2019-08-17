@@ -35,15 +35,3 @@ apps:
       DISABLE_WAYLAND: '1'
       GIT_TEMPLATE_DIR: $SNAP/usr/share/git-core/templates
       GIT_EXEC_PATH: $SNAP/usr/lib/git-core
-  nift:
-    command: nift
-    plugs:
-      - home
-      - removable-media
-      - network
-      - network-bind
-    environment:
-      LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio
-      DISABLE_WAYLAND: '1'
-      GIT_TEMPLATE_DIR: $SNAP/usr/share/git-core/templates
-      GIT_EXEC_PATH: $SNAP/usr/lib/git-core
