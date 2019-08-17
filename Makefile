@@ -6,6 +6,7 @@ CXXFLAGS=-std=c++11 -Wall -Wextra -pedantic
 
 nsm: $(objects)
 	$(CC) $(CXXFLAGS) $(cppfiles) -o nsm
+	$(CC) $(CXXFLAGS) $(cppfiles) -o nift
 
 nsm.o: nsm.cpp SiteInfo.o
 	$(CC) $(CXXFLAGS) -c -o $@ $<
@@ -39,14 +40,16 @@ Quoted.o: Quoted.cpp Quoted.h
 
 install:
 	chmod 755 nsm
+	mv nift $(DESTDIR)
 	mv nsm $(DESTDIR)
 
 uninstall:
+	rm $(DESTDIR)/nift
 	rm $(DESTDIR)/nsm
 
 clean:
 	rm -f $(objects)
 
 clean-all:
-	rm -f $(objects) nsm
+	rm -f $(objects) nift nsm
 

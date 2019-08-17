@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 
 #include "SiteInfo.h"
 
@@ -63,6 +64,43 @@ std::string ls(const char *path)
     closedir(dir);
 
     return lsStr;
+}
+
+std::vector<std::string> lsVec(const char *path)
+{
+    std::vector<std::string> ans;
+    struct dirent *entry;
+    DIR *dir = opendir(path);
+    if(dir == NULL)
+        return ans;
+
+    while((entry = readdir(dir)) != NULL)
+        if(std::string(entry->d_name) != "." && std::string(entry->d_name) != "..")
+            ans.push_back(entry->d_name);
+
+    closedir(dir);
+
+    return ans;
+}
+
+void delDir(std::string dir)
+{
+    std::string owd = get_pwd();
+    chdir(dir.c_str());
+
+    std::vector<std::string> files = lsVec("./");
+    for(size_t f=0; f<files.size(); f++)
+    {
+        struct stat s;
+
+        if(stat(files[f].c_str(),&s) == 0 && s.st_mode & S_IFDIR)
+            delDir(files[f]);
+        else
+            Path("./", files[f]).removePath();
+    }
+
+    chdir(owd.c_str());
+    rmdir(dir.c_str());
 }
 
 //get present git branch
@@ -140,35 +178,60 @@ int main(int argc, char* argv[])
 
     if(cmd == "commands")
     {
-        std::cout << "+---------- available commands ----------------------------------------+" << std::endl;
-        std::cout << "| nsm commands       | lists all nsm commands                          |" << std::endl;
-        std::cout << "| nsm config         | list config settings or set git email/username  |" << std::endl;
-        std::cout << "| nsm clone          | input: clone-url                                |" << std::endl;
-        std::cout << "| nsm init           | initialise managing a site - input: (site-name) |" << std::endl;
-        std::cout << "| nsm status         | lists updated and problem pages                 |" << std::endl;
-        std::cout << "| nsm info           | input: page-name-1 .. page-name-k               |" << std::endl;
-        std::cout << "| nsm info-all       | lists tracked pages                             |" << std::endl;
-        std::cout << "| nsm info-names     | lists tracked page names                        |" << std::endl;
-        std::cout << "| nsm track          | input: page-name (page-title) (template-path)   |" << std::endl;
-        std::cout << "| nsm untrack        | input: page-name                                |" << std::endl;
-        std::cout << "| nsm rm             | input: page-name                                |" << std::endl;
-        std::cout << "| nsm mv             | input: old-name new-name                        |" << std::endl;
-        std::cout << "| nsm cp             | input: tracked-name new-name                    |" << std::endl;
-        std::cout << "| nsm build          | input: page-name-1 .. page-name-k               |" << std::endl;
-        std::cout << "| nsm build-updated  | builds updated pages                            |" << std::endl;
-        std::cout << "| nsm build-all      | builds all tracked pages                        |" << std::endl;
-        std::cout << "| nsm bcp            | input: commit-message                           |" << std::endl;
-        std::cout << "| nsm new-title      | input: page-name new-title                      |" << std::endl;
-        std::cout << "| nsm new-template   | input: page-name template-path                  |" << std::endl;
-        std::cout << "+----------------------------------------------------------------------+" << std::endl;
+        std::string str = "";
+        std::string exe = "";
+        if(std::string(argv[0]).find('\\') != std::string::npos)
+        {
+            for(int i=std::string(argv[0]).find_last_of('\\')+1; std::string(argv[0])[i] != '.'; i++)
+            {
+                str += "-";
+                exe += std::string(argv[0])[i];
+            }
+        }
+        else if(std::string(argv[0]).find('/') != std::string::npos)
+        {
+            for(int i=std::string(argv[0]).find_last_of('/')+1; std::string(argv[0])[i] != '.'; i++)
+            {
+                str += "-";
+                exe += std::string(argv[0])[i];
+            }
+        }
+        else
+        {
+            exe = argv[0];
+            for(size_t i=0; i<std::string(argv[0]).size(); i++)
+                str += "-";
+        }
+
+        std::cout << "+" << str << "------- available commands ----------------------------------------+" << std::endl;
+        std::cout << "| " << exe << " commands       | lists all nsm commands                          |" << std::endl;
+        std::cout << "| " << exe << " config         | list config settings or set git email/username  |" << std::endl;
+        std::cout << "| " << exe << " clone          | input: clone-url                                |" << std::endl;
+        std::cout << "| " << exe << " init           | initialise managing a site - input: (site-name) |" << std::endl;
+        std::cout << "| " << exe << " status         | lists updated and problem pages                 |" << std::endl;
+        std::cout << "| " << exe << " info           | input: page-name-1 .. page-name-k               |" << std::endl;
+        std::cout << "| " << exe << " info-all       | lists tracked pages                             |" << std::endl;
+        std::cout << "| " << exe << " info-names     | lists tracked page names                        |" << std::endl;
+        std::cout << "| " << exe << " track          | input: page-name (page-title) (template-path)   |" << std::endl;
+        std::cout << "| " << exe << " untrack        | input: page-name                                |" << std::endl;
+        std::cout << "| " << exe << " rm or nsm del  | input: page-name                                |" << std::endl;
+        std::cout << "| " << exe << " mv or nsm move | input: old-name new-name                        |" << std::endl;
+        std::cout << "| " << exe << " cp or nsm copy | input: tracked-name new-name                    |" << std::endl;
+        std::cout << "| " << exe << " build          | input: page-name-1 .. page-name-k               |" << std::endl;
+        std::cout << "| " << exe << " build-updated  | builds updated pages                            |" << std::endl;
+        std::cout << "| " << exe << " build-all      | builds all tracked pages                        |" << std::endl;
+        std::cout << "| " << exe << " bcp            | input: commit-message                           |" << std::endl;
+        std::cout << "| " << exe << " new-title      | input: page-name new-title                      |" << std::endl;
+        std::cout << "| " << exe << " new-template   | input: page-name template-path                  |" << std::endl;
+        std::cout << "+" << str << "-------------------------------------------------------------------+" << std::endl;
 
         return 0;
     }
     else if(cmd == "help" || cmd == "-help" || cmd == "--help")
     {
-        std::cout << "nifty site manager (nsm) is a cross-platform open source git-like and LaTeX-like site manager." << std::endl;
+        std::cout << "nifty site manager (aka nift or nsm) is a cross-platform open source git-like and LaTeX-like site manager." << std::endl;
         std::cout << "official site: https://nift.cc/" << std::endl;
-        std::cout << "enter `nsm commands` for available commands" << std::endl;
+        std::cout << "enter `nift commands` or `nsm commands` for available commands" << std::endl;
 
         return 0;
     }
@@ -219,7 +282,15 @@ int main(int argc, char* argv[])
 
         //checks that directory is empty
         std::string str = ls("./");
-        if(str != ".git .. . " && str != ".. . " && str != ". .. .git " && str != ". .. ")
+        std::cout << "wtf '" << str << "'" << std::endl;
+        if(str != ".. . " &&
+           str != ". .. " &&
+           str != ".git .. . " &&
+           str != ".git . .. " &&
+           str != ". .git .. " &&
+           str != ".. .git . " &&
+           str != ". .. .git " &&
+           str != ".. . .git ")
         {
             std::cout << "error: init must be run in an empty directory or empty git repository" << std::endl;
             return 1;
@@ -460,7 +531,8 @@ int main(int argc, char* argv[])
             if(site.open() > 0)
                 return 1;
 
-            rmdir(site.siteDir.c_str());
+            //rmdir(site.siteDir.c_str()); //doesn't work for non-empty directories
+            delDir(site.siteDir);
 
             chdir(parDir.c_str());
             rename(".abcd143d", (dirName + "/" + site.siteDir).c_str());
@@ -480,8 +552,11 @@ int main(int argc, char* argv[])
            cmd != "track" &&
            cmd != "untrack" &&
            cmd != "rm" &&
+           cmd != "del" &&
            cmd != "mv" &&
+           cmd != "move" &&
            cmd != "cp" &&
+           cmd != "copy" &&
            cmd != "new-title" &&
            cmd != "new-template" &&
            cmd != "build-updated" &&
@@ -518,8 +593,6 @@ int main(int argc, char* argv[])
                 return 1;
             }
         }
-
-        siteRootDir = get_pwd();
 
         //ensures both pages.list and nsm.config exist
         if(!std::ifstream(".siteinfo/pages.list"))
@@ -709,7 +782,7 @@ int main(int argc, char* argv[])
 
             return site.untrack(pageNameToUntrack);
         }
-        else if(cmd == "rm")
+        else if(cmd == "rm" || cmd == "del")
         {
             //ensures correct number of parameters given
             if(noParams != 2)
@@ -719,7 +792,7 @@ int main(int argc, char* argv[])
 
             return site.rm(pageNameToRemove);
         }
-        else if(cmd == "mv")
+        else if(cmd == "mv" || cmd == "move")
         {
             //ensures correct number of parameters given
             if(noParams != 3)
@@ -730,7 +803,7 @@ int main(int argc, char* argv[])
 
             return site.mv(oldPageName, newPageName);
         }
-        else if(cmd == "cp")
+        else if(cmd == "cp" || cmd == "copy")
         {
             //ensures correct number of parameters given
             if(noParams != 3)

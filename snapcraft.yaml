@@ -3,11 +3,11 @@ version: '1.0'
 summary: dynamic/static site generator
 license: MIT
 description: |
-  install: `snap install nsm`
+  `snap install nsm`
   
-  Nifty site manager (nsm) is a cross-platform open
-  source git-like and LaTeX-like command-line dynamic
-  and static site generator. See https://nift.cc.
+  Nifty site manager (nsm or nift) is a cross-platform
+  open source git-like and LaTeX-like command-line
+  dynamic and static site generator. See https://nift.cc.
 
 confinement: strict
 base: core18
