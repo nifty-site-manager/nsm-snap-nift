@@ -1,9 +1,9 @@
-name: nsm
+name: nift
 version: '1.7'
 summary: dynamic/static site generator
 license: MIT
 description: |
-  `snap install nsm`
+  `snap install nift`
   
   Nift (aka nsm) is a cross-platform open source git-like
   and LaTeX-like command-line dynamic and static site 
@@ -23,8 +23,8 @@ parts:
     - git-core
 
 apps:
-  nsm:
-    command: nsm
+  nift:
+    command: nift
     plugs:
       - home
       - removable-media
@@ -35,8 +35,8 @@ apps:
       DISABLE_WAYLAND: '1'
       GIT_TEMPLATE_DIR: $SNAP/usr/share/git-core/templates
       GIT_EXEC_PATH: $SNAP/usr/lib/git-core
-  nift:
-    command: nift
+  nsm:
+    command: nsm
     plugs:
       - home
       - removable-media
