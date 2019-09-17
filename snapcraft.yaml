@@ -9,7 +9,7 @@ description: |
   and LaTeX-like command-line dynamic and static site 
   generator. See https://nift.cc.
 
-confinement: strict
+confinement: classic
 base: core18
 
 parts:
