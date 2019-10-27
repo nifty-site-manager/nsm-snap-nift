@@ -1,6 +1,7 @@
 #ifndef SITE_INFO_H_
 #define SITE_INFO_H_
 
+#include <cmath>
 #include <math.h>
 #include <mutex>
 #include <thread>
@@ -38,7 +39,8 @@ struct SiteInfo
 
     int new_title(const Name &pageName, const Title &newTitle);
     int new_template(const Name &pageName, const Path &newTemplatePath);
-    int new_ext(const Name &pageName, const std::string &newExt);
+    int new_page_ext(const std::string &newExt);
+    int new_page_ext(const Name &pageName, const std::string &newExt);
 
     int build(const std::vector<Name>& pageNamesToBuild);
     int build_all();
