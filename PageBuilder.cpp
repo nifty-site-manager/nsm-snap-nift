@@ -1,9 +1,8 @@
 #include "PageBuilder.h"
 
-PageBuilder::PageBuilder(const std::set<PageInfo> &Pages)
+PageBuilder::PageBuilder(std::set<PageInfo>* Pages)
 {
     pages = Pages;
-    counter = 0;
 }
 
 bool PageBuilder::run_page_prebuild_scripts(std::ostream& os)
@@ -210,9 +209,12 @@ bool PageBuilder::run_page_postbuild_scripts(std::ostream& os)
     return 0;
 }
 
+std::atomic<long long int> sys_counter;
+//might be nice if we set above to 0 somwhere
+
 int PageBuilder::build(const PageInfo &PageToBuild, std::ostream& os)
 {
-    counter = counter%1000000000000000000;
+    sys_counter = sys_counter%1000000000000000000;
     pageToBuild = PageToBuild;
 
     //os_mtx.lock();
@@ -281,7 +283,7 @@ int PageBuilder::build(const PageInfo &PageToBuild, std::ostream& os)
 
         //writes processed page to page file
         std::ofstream pageStream(pageToBuild.pagePath.str());
-        pageStream << processedPage.str() << std::endl;
+        pageStream << processedPage.str() << "\n";
         pageStream.close();
 
         //makes sure user can't accidentally write to page file
@@ -298,10 +300,10 @@ int PageBuilder::build(const PageInfo &PageToBuild, std::ostream& os)
 
         //writes page info file
         std::ofstream infoStream(pageInfoPath.str());
-        infoStream << dateTimeInfo.currentTime() << " " << dateTimeInfo.currentDate() << std::endl;
-        infoStream << this->pageToBuild << std::endl << std::endl;
+        infoStream << dateTimeInfo.currentTime() << " " << dateTimeInfo.currentDate() << "\n";
+        infoStream << this->pageToBuild << "\n\n";
         for(auto pageDep=pageDeps.begin(); pageDep != pageDeps.end(); pageDep++)
-            infoStream << *pageDep << std::endl;
+            infoStream << *pageDep << "\n";
         infoStream.close();
 
         //makes sure user can't accidentally write to info file
@@ -340,9 +342,9 @@ int PageBuilder::read_and_process(const Path &readPath, std::set<Path> antiDepsO
         {
             indentAmount = baseIndentAmount;
             if(codeBlockDepth)
-                processedPage << std::endl;
+                processedPage << "\n";
             else
-                processedPage << std::endl << baseIndentAmount;
+                processedPage << "\n" << baseIndentAmount;
         }
 
         for(size_t linePos=0; linePos<inLine.length();)
@@ -558,7 +560,7 @@ int PageBuilder::read_and_process(const Path &readPath, std::set<Path> antiDepsO
                 {
                     linePos+=std::string("@script(").length();
                     std::string sys_call;
-                    std::string output_filename = ".@scriptoutput" + std::to_string(counter++);
+                    std::string output_filename = ".@scriptoutput" + std::to_string(sys_counter++);
 
                     if(read_sys_call(sys_call, linePos, inLine, readPath, lineNo, "@script()", os) > 0)
                         return 1;
@@ -624,7 +626,7 @@ int PageBuilder::read_and_process(const Path &readPath, std::set<Path> antiDepsO
                 {
                     linePos+=std::string("@scriptoutput(").length();
                     std::string sys_call;
-                    std::string output_filename = ".@scriptoutput" + std::to_string(counter++);
+                    std::string output_filename = ".@scriptoutput" + std::to_string(sys_counter++);
 
                     if(read_sys_call(sys_call, linePos, inLine, readPath, lineNo, "@scriptoutput()", os) > 0)
                         return 1;
@@ -679,7 +681,7 @@ int PageBuilder::read_and_process(const Path &readPath, std::set<Path> antiDepsO
                 {
                     linePos+=std::string("@system(").length();
                     std::string sys_call;
-                    std::string output_filename = ".@systemoutput" + std::to_string(counter++);
+                    std::string output_filename = ".@systemoutput" + std::to_string(sys_counter++);
 
                     if(read_sys_call(sys_call, linePos, inLine, readPath, lineNo, "@system()", os) > 0)
                         return 1;
@@ -733,8 +735,7 @@ int PageBuilder::read_and_process(const Path &readPath, std::set<Path> antiDepsO
                 {
                     linePos+=std::string("@systemoutput(").length();
                     std::string sys_call;
-                    std::string output_filename = ".@systemoutput" + std::to_string(counter++);
-
+                    std::string output_filename = ".@systemoutput" + std::to_string(sys_counter++);
 
                     if(read_sys_call(sys_call, linePos, inLine, readPath, lineNo, "@systemoutput()", os) > 0)
                         return 1;
@@ -773,6 +774,52 @@ int PageBuilder::read_and_process(const Path &readPath, std::set<Path> antiDepsO
 
                     Path("./", output_filename).removePath();
                 }
+                else if(inLine.substr(linePos, 15) == "@systemcontent(")
+                {
+                    linePos+=std::string("@systemcontent(").length();
+                    std::string sys_call;
+                    std::string output_filename = ".@systemcontent" + std::to_string(sys_counter++);
+
+                    if(read_sys_call(sys_call, linePos, inLine, readPath, lineNo, "@systemcontent()", os) > 0)
+                        return 1;
+
+                    contentAdded = 1;
+                    sys_call += " " + quote(pageToBuild.contentPath.str());
+
+                    //checks whether we're running from flatpak
+                    if(std::ifstream("/.flatpak-info"))
+                    {
+                        //need sys_call quoted here for cURL to work
+                        if(system(("flatpak-spawn --host bash -c " + quote(sys_call) + " > " + output_filename).c_str()))
+                        {
+                            os_mtx.lock();
+                            os << "error: " << readPath << ": line " << lineNo << ": @systemcontent(" << quote(sys_call) << ") failed" << std::endl;
+                            os_mtx.unlock();
+                            Path("./", output_filename).removePath();
+                            return 1;
+                        }
+                    }
+                    else if(system((sys_call + " > " + output_filename).c_str())) //sys_call has to be unquoted for cURL to work
+                    {
+                        os_mtx.lock();
+                        os << "error: " << readPath << ": line " << lineNo << ": @systemcontent(" << quote(sys_call) << ") failed" << std::endl;
+                        os_mtx.unlock();
+                        Path("./", output_filename).removePath();
+                        return 1;
+                    }
+
+                    //indent amount updated inside read_and_process
+                    if(read_and_process(Path("", output_filename), antiDepsOfReadPath, os) > 0)
+                    {
+                        os_mtx.lock();
+                        os << "error: " << readPath << ": line " << lineNo << ": failed to process output of system call '" << sys_call << "'" << std::endl;
+                        os_mtx.unlock();
+                        Path("./", output_filename).removePath();
+                        return 1;
+                    }
+
+                    Path("./", output_filename).removePath();
+                }
                 else if(inLine.substr(linePos, 8) == "@pathto(")
                 {
                     linePos+=std::string("@pathto(").length();
@@ -784,7 +831,7 @@ int PageBuilder::read_and_process(const Path &readPath, std::set<Path> antiDepsO
                     //throws error if target targetPageName isn't being tracked by Nift
                     PageInfo targetPageInfo;
                     targetPageInfo.pageName = targetPageName;
-                    if(!pages.count(targetPageInfo))
+                    if(!pages->count(targetPageInfo))
                     {
                         os_mtx.lock();
                         os << "error: " << readPath << ": line " << lineNo << ": @pathto(" << targetPageName << ") failed, Nift not tracking " << targetPageName << std::endl;
@@ -793,7 +840,7 @@ int PageBuilder::read_and_process(const Path &readPath, std::set<Path> antiDepsO
                     }
 
 
-                    Path targetPath = pages.find(targetPageInfo)->pagePath;
+                    Path targetPath = pages->find(targetPageInfo)->pagePath;
                     //targetPath.set_file_path_from(targetPathStr);
 
                     Path pathToTarget(pathBetween(pageToBuild.pagePath.dir, targetPath.dir), targetPath.file);
@@ -813,7 +860,7 @@ int PageBuilder::read_and_process(const Path &readPath, std::set<Path> antiDepsO
                     //throws error if target targetPageName isn't being tracked by Nift
                     PageInfo targetPageInfo;
                     targetPageInfo.pageName = targetPageName;
-                    if(!pages.count(targetPageInfo))
+                    if(!pages->count(targetPageInfo))
                     {
                         os_mtx.lock();
                         os << "error: " << readPath << ": line " << lineNo << ": @pathtopage(" << targetPageName << ") failed, Nift not tracking " << targetPageName << std::endl;
@@ -822,7 +869,7 @@ int PageBuilder::read_and_process(const Path &readPath, std::set<Path> antiDepsO
                     }
 
 
-                    Path targetPath = pages.find(targetPageInfo)->pagePath;
+                    Path targetPath = pages->find(targetPageInfo)->pagePath;
                     //targetPath.set_file_path_from(targetPathStr);
 
                     Path pathToTarget(pathBetween(pageToBuild.pagePath.dir, targetPath.dir), targetPath.file);
