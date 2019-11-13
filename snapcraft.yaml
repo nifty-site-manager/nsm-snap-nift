@@ -24,11 +24,6 @@ parts:
 apps:
   nift:
     command: nift
-    plugs:
-      - home
-      - removable-media
-      - network
-      - network-bind
     environment:
       LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio
       DISABLE_WAYLAND: '1'
@@ -36,11 +31,6 @@ apps:
       GIT_EXEC_PATH: $SNAP/usr/lib/git-core
   nsm:
     command: nsm
-    plugs:
-      - home
-      - removable-media
-      - network
-      - network-bind
     environment:
       LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio
       DISABLE_WAYLAND: '1'
