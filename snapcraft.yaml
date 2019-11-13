@@ -1,15 +1,14 @@
 name: nift
 version: '1.17'
-summary: dynamic/static site generator
+summary: website generator
 license: MIT
 description: |
-  `snap install nift`
+  `snap install nift --classic`
   
-  Nift (aka nsm) is a cross-platform open source git-like
-  and LaTeX-like command-line dynamic and static site 
-  generator. See https://nift.cc.
+  Nift (aka nsm) is a cross-platform open source 
+  command-line website generator. See https://nift.cc.
 
-confinement: strict
+confinement: classic
 base: core18
 
 parts:
