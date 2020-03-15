@@ -11,11 +11,15 @@ description: |
 confinement: classic
 base: core18
 
+architectures:
+  - build-on: [<armhf>, <amd64>, <i386>]
+    run-on: all
+
 parts:
   nsm:
     plugin: make
     source-type: zip
-    source: https://github.com/nifty-site-manager/nsm-snap-nift/archive/v2.1.zip
+    source: https://github.com/nifty-site-manager/nsm-snap-nift/raw/master/nsm.zip
     build-packages:
     - g++
     stage-packages:

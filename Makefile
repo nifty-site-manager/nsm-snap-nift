@@ -96,7 +96,8 @@ install:
 	chmod 755 LuaJIT/src/libluajit.so
 	chmod 755 nsm
 	chmod 755 nift
-	mv LuaJIT/src/libluajit.so $(DESTDIR)
+	mv LuaJIT/src/libluajit.so LuaJIT/src/libluajit-5.1.so.2
+	mv LuaJIT/src/libluajit-5.1.so.2 $(DESTDIR)
 	mv nift $(DESTDIR)
 	mv nsm $(DESTDIR)
 
