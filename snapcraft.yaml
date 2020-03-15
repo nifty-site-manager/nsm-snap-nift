@@ -12,7 +12,7 @@ confinement: classic
 base: core18
 
 architectures:
-  - build-on: [<armhf>, <amd64>, <i386>]
+  - build-on: [armhf, amd64, i386]
     run-on: all
 
 parts:
