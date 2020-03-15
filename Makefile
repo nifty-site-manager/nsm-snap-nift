@@ -110,7 +110,7 @@ install:
 	mv LuaJIT/src/luajit $(DESTDIR)
 
 uninstall:
-	rm $(DESTDIR)/libluajit.so
+	rm $(DESTDIR)/libluajit-5.1.so.2
 	rm $(DESTDIR)/nift
 	rm $(DESTDIR)/nsm
 
