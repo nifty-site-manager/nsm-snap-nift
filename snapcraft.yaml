@@ -1,12 +1,12 @@
 name: nift
-version: '2.0.1'
+version: '2.1'
 summary: website generator
 license: MIT
 description: |
   `snap install nift --classic`
   
   Nift (aka nsm) is a cross-platform open source 
-  command-line website generator. See https://nift.cc.
+  CLI website generator. See https://nift.cc.
 
 confinement: classic
 base: core18
@@ -15,7 +15,7 @@ parts:
   nsm:
     plugin: make
     source-type: zip
-    source: https://github.com/nifty-site-manager/nsm-snap/raw/master/nsm.zip
+    source: https://github.com/nifty-site-manager/nsm-snap-nift/archive/v2.1.zip
     build-packages:
     - g++
     stage-packages:
