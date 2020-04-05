@@ -1,6 +1,6 @@
 #basic makefile for nsm-snap-nift
-objects=nsm.o ConsoleColor.o DateTimeInfo.o Directory.o Expr.o ExprtkFns.o Filename.o FileSystem.o Getline.o GitInfo.o LuaFns.o LuaJIT.o NumFns.o Parser.o Path.o ProjectInfo.o Quoted.o StrFns.o SystemInfo.o Title.o TrackedInfo.o Variables.o WatchList.o
-cppfiles=nsm.cpp ConsoleColor.cpp DateTimeInfo.cpp Directory.cpp Expr.cpp ExprtkFns.cpp Filename.cpp FileSystem.cpp Getline.cpp GitInfo.cpp LuaFns.cpp LuaJIT.cpp NumFns.cpp Parser.cpp Path.cpp ProjectInfo.cpp Quoted.cpp StrFns.cpp SystemInfo.cpp Title.cpp TrackedInfo.cpp Variables.cpp WatchList.cpp
+objects=nsm.o ConsoleColor.o DateTimeInfo.o Directory.o Expr.o ExprtkFns.o Filename.o FileSystem.o Getline.o GitInfo.o LuaFns.o LuaJIT.o NumFns.o Pagination.o Parser.o Path.o ProjectInfo.o Quoted.o StrFns.o SystemInfo.o Title.o TrackedInfo.o Variables.o WatchList.o
+cppfiles=nsm.cpp ConsoleColor.cpp DateTimeInfo.cpp Directory.cpp Expr.cpp ExprtkFns.cpp Filename.cpp FileSystem.cpp Getline.cpp GitInfo.cpp LuaFns.cpp LuaJIT.cpp NumFns.cpp Pagination.cpp Parser.cpp Path.cpp ProjectInfo.cpp Quoted.cpp StrFns.cpp SystemInfo.cpp Title.cpp TrackedInfo.cpp Variables.cpp WatchList.cpp
 
 CXX?=g++
 CXXFLAGS=-std=c++11 -Wall -Wextra -pedantic -O3 -s
@@ -30,28 +30,31 @@ ProjectInfo.o: ProjectInfo.cpp ProjectInfo.h GitInfo.o Parser.o WatchList.o Time
 GitInfo.o: GitInfo.cpp GitInfo.h ConsoleColor.o FileSystem.o
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-Parser.o: Parser.cpp Parser.h DateTimeInfo.o Expr.o ExprtkFns.o FileSystem.o Getline.o LuaFns.o LuaJIT.o SystemInfo.o TrackedInfo.o Variables.o 
+Parser.o: Parser.cpp Parser.h DateTimeInfo.o Expr.o ExprtkFns.o Getline.o LuaFns.o LuaJIT.o Pagination.o SystemInfo.o TrackedInfo.o Variables.o 
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 WatchList.o: WatchList.cpp WatchList.h FileSystem.o
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-ExprtkFns.o: ExprtkFns.cpp ExprtkFns.h Expr.o Variables.o Consts.h
+Getline.o: Getline.cpp Getline.h ConsoleColor.o FileSystem.o StrFns.o Consts.h
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+LuaFns.o: LuaFns.cpp LuaFns.h LuaJIT.o ConsoleColor.o ExprtkFns.o FileSystem.o Path.o Quoted.o Variables.o Consts.h
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+LuaJIT.o: LuaJIT.cpp LuaJIT.h StrFns.o LuaJIT/src/lua.hpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+ExprtkFns.o: ExprtkFns.cpp ExprtkFns.h Expr.o FileSystem.o Quoted.o Variables.o Consts.h
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 Expr.o: Expr.cpp Expr.h exprtk/exprtk.h
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-Getline.o: Getline.cpp Getline.h ConsoleColor.o FileSystem.o StrFns.o Consts.h
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
-
 FileSystem.o: FileSystem.cpp FileSystem.h Path.o SystemInfo.o
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-LuaFns.o: LuaFns.cpp LuaFns.h LuaJIT.o ConsoleColor.o Path.o Quoted.o Variables.o Consts.h
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
-
-LuaJIT.o: LuaJIT.cpp LuaJIT.h StrFns.o LuaJIT/src/lua.hpp
+Pagination.o: Pagination.cpp Pagination.h Path.o
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 DateTimeInfo.o: DateTimeInfo.cpp DateTimeInfo.h
