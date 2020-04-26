@@ -1,6 +1,6 @@
 #basic makefile for nsm-snap-nift
-objects=nsm.o ConsoleColor.o DateTimeInfo.o Directory.o Expr.o ExprtkFns.o Filename.o FileSystem.o Getline.o GitInfo.o Lolcat.o LuaFns.o LuaJIT.o NumFns.o Pagination.o Parser.o Path.o ProjectInfo.o Quoted.o StrFns.o SystemInfo.o Title.o TrackedInfo.o Variables.o WatchList.o
-cppfiles=nsm.cpp ConsoleColor.cpp DateTimeInfo.cpp Directory.cpp Expr.cpp ExprtkFns.cpp Filename.cpp FileSystem.cpp Getline.cpp GitInfo.cpp Lolcat.cpp LuaFns.cpp LuaJIT.cpp NumFns.cpp Pagination.cpp Parser.cpp Path.cpp ProjectInfo.cpp Quoted.cpp StrFns.cpp SystemInfo.cpp Title.cpp TrackedInfo.cpp Variables.cpp WatchList.cpp
+objects=nsm.o ConsoleColor.o DateTimeInfo.o Directory.o Expr.o ExprtkFns.o Filename.o FileSystem.o Getline.o GitInfo.o HashTk.o Lolcat.o LuaFns.o LuaJIT.o NumFns.o Pagination.o Parser.o Path.o ProjectInfo.o Quoted.o StrFns.o SystemInfo.o Title.o TrackedInfo.o Variables.o WatchList.o
+cppfiles=nsm.cpp ConsoleColor.cpp DateTimeInfo.cpp Directory.cpp Expr.cpp ExprtkFns.cpp Filename.cpp FileSystem.cpp Getline.cpp GitInfo.cpp hashtk/HashTk.cpp Lolcat.cpp LuaFns.cpp LuaJIT.cpp NumFns.cpp Pagination.cpp Parser.cpp Path.cpp ProjectInfo.cpp Quoted.cpp StrFns.cpp SystemInfo.cpp Title.cpp TrackedInfo.cpp Variables.cpp WatchList.cpp
 
 CXX?=g++
 CXXFLAGS=-std=c++11 -Wall -Wextra -pedantic -O3 -s
@@ -17,6 +17,11 @@ make-luajit:
 
 ###
 
+HashTk.o: hashtk/HashTk.cpp hashtk/HashTk.h
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+###
+
 nsm: $(objects)
 	$(CXX) $(CXXFLAGS) $(objects) -o nsm $(LINK)
 	cp nsm nift
@@ -30,7 +35,7 @@ ProjectInfo.o: ProjectInfo.cpp ProjectInfo.h GitInfo.o Parser.o WatchList.o Time
 GitInfo.o: GitInfo.cpp GitInfo.h ConsoleColor.o FileSystem.o
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-Parser.o: Parser.cpp Parser.h DateTimeInfo.o Expr.o ExprtkFns.o Getline.o LuaFns.o LuaJIT.o Pagination.o SystemInfo.o TrackedInfo.o Variables.o 
+Parser.o: Parser.cpp Parser.h DateTimeInfo.o Expr.o ExprtkFns.o Getline.o HashTk.o LuaFns.o LuaJIT.o Pagination.o SystemInfo.o TrackedInfo.o Variables.o 
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 WatchList.o: WatchList.cpp WatchList.h FileSystem.o
