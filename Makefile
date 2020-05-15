@@ -3,7 +3,7 @@ objects=nsm.o ConsoleColor.o DateTimeInfo.o Directory.o Expr.o ExprtkFns.o Filen
 cppfiles=nsm.cpp ConsoleColor.cpp DateTimeInfo.cpp Directory.cpp Expr.cpp ExprtkFns.cpp Filename.cpp FileSystem.cpp Getline.cpp GitInfo.cpp hashtk/HashTk.cpp Lolcat.cpp LuaFns.cpp Lua.cpp NumFns.cpp Pagination.cpp Parser.cpp Path.cpp ProjectInfo.cpp Quoted.cpp StrFns.cpp SystemInfo.cpp Title.cpp TrackedInfo.cpp Variables.cpp WatchList.cpp
 
 CXX?=g++
-CXXFLAGS=-D__BUNDLED__ -std=c++11 -Wall -Wextra -pedantic -O3 -s
+CXXFLAGS=-D__BUNDLED__ -std=c++11 -Wall -Wextra -pedantic -O3 -s -Dexprtk_disable_caseinsensitivity
 LINK=-pthread ./LuaJIT/src/libluajit.a -ldl
 
 ###
