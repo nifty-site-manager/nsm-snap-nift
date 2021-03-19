@@ -29,10 +29,10 @@ struct exprtk_cd : public exprtk::igeneric_function<T>
 		std::string target = replace_home_dir(inStr);
 
 		if(!dir_exists(target))
-	    	return 1;
+			return 1;
 
 		if(chdir(target.c_str()))
-	    	return 1;
+			return 1;
 
 		return 0;
 	}
@@ -58,14 +58,14 @@ struct exprtk_sys : public exprtk::igeneric_function<T>
 		std::string sys_call = std::string(param_strt.begin(), param_strt.size());
 
 		#if defined _WIN32 || defined _WIN64
-	        if(unquote(sys_call).substr(0, 2) == "./")
-	            sys_call = unquote(sys_call).substr(2, unquote(sys_call).size()-2);
-	    #else  //*nix
-	        if(file_exists("/.flatpak-info"))
-	            sys_call = "flatpak-spawn --host bash -c " + quote(sys_call);
-	    #endif
+			if(unquote(sys_call).substr(0, 2) == "./")
+				sys_call = unquote(sys_call).substr(2, unquote(sys_call).size()-2);
+		#else  //*nix
+			if(file_exists("/.flatpak-info"))
+				sys_call = "flatpak-spawn --host bash -c " + quote(sys_call);
+		#endif
 
-	    int result = system(sys_call.c_str());
+		int result = system(sys_call.c_str());
 
 		if(result && (*nsm_mode == MODE_INTERP || *nsm_mode == MODE_SHELL))
 			std::cout << "\a" << std::flush;
@@ -122,19 +122,17 @@ struct exprtk_nsm_lang : public exprtk::igeneric_function<T>
 		string_t param_strt(gt);
 		std::string langStr = std::string(param_strt.begin(), param_strt.size());
 
-		int pos = langStr.find_first_of("nflexc", 0);
+		int pos = langStr.find_first_of("fFnNtTlLeExX", 0);
 		if(pos >= 0)
 		{
-			if(langStr[pos] == 'n')
-				*nsm_lang = "n++";
-			else if(langStr[pos] == 'f')
+			if(langStr[pos] == 'f' || langStr[pos] == 'F')
 				*nsm_lang = "f++";
-			else if(langStr[pos] == 'l')
+			else if(langStr[pos] == 'n' || langStr[pos] == 'N' || langStr[pos] == 't' || langStr[pos] == 'T')
+				*nsm_lang = "n++";
+			else if(langStr[pos] == 'l' || langStr[pos] == 'L')
 				*nsm_lang = "lua";
-			else if(langStr[pos] == 'e' || langStr[pos] == 'x')
+			else if(langStr[pos] == 'e' || langStr[pos] == 'E' || langStr[pos] == 'x' || langStr[pos] == 'X')
 				*nsm_lang = "exprtk";
-			else if(langStr[pos] == 'c')
-				*nsm_lang = "chai";
 
 			return 1;
 		}
@@ -167,12 +165,12 @@ struct exprtk_nsm_mode : public exprtk::igeneric_function<T>
 		string_t param_strt(gt);
 		std::string modeStr = std::string(param_strt.begin(), param_strt.size());
 
-		int pos = modeStr.find_first_of("si", 0);
+		int pos = modeStr.find_first_of("sSiI", 0);
 		if(pos >= 0)
 		{
-			if(modeStr[pos] == 's')
+			if(modeStr[pos] == 's' || modeStr[pos] == 'S')
 				*nsm_mode = MODE_SHELL;
-			else if(modeStr[pos] == 'i')
+			else if(modeStr[pos] == 'i' || modeStr[pos] == 'I')
 				*nsm_mode = MODE_INTERP;
 
 			return 1;
