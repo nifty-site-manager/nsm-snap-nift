@@ -1,5 +1,5 @@
 name: nift
-version: '2.4.1'
+version: '2.4.2'
 summary: website generator
 license: MIT
 description: |
@@ -21,7 +21,7 @@ parts:
   nsm:
     plugin: make
     source-type: zip
-    source: https://github.com/nifty-site-manager/nsm-snap-nift/raw/master/nsm.zip
+    source: https://github.com/nifty-site-manager/nsm/archive/refs/tags/v2.4.2.zip
     build-packages:
     - g++
     stage-packages:
