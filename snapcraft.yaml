@@ -1,5 +1,5 @@
 name: nift
-version: '3.0.0'
+version: '3.0.1'
 summary: website generator
 license: MIT
 description: |
@@ -21,7 +21,7 @@ parts:
   nsm:
     plugin: make
     source-type: zip
-    source: https://github.com/nifty-site-manager/nsm/releases/download/v3.0.0/Snapcraft.zip
+    source: https://github.com/nifty-site-manager/nsm/releases/download/v3.0.1/Snapcraft.zip
     build-packages:
     - g++
     stage-packages:
